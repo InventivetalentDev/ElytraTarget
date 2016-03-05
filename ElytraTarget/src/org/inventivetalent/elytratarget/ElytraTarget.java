@@ -45,6 +45,7 @@ import org.inventivetalent.reflection.minecraft.Minecraft;
 import org.inventivetalent.reflection.resolver.MethodResolver;
 import org.inventivetalent.reflection.resolver.minecraft.NMSClassResolver;
 import org.inventivetalent.title.TitleAPI;
+import org.mcstats.MetricsLite;
 
 import java.util.Collections;
 
@@ -83,6 +84,14 @@ public class ElytraTarget extends JavaPlugin implements Listener {
 
 		saveDefaultConfig();
 		reload();
+
+		try {
+			MetricsLite metrics = new MetricsLite(this);
+			if (metrics.start()) {
+				getLogger().info("Metrics started");
+			}
+		} catch (Exception e) {
+		}
 	}
 
 	void reload() {
