@@ -34,7 +34,7 @@
 
     <groupId>org.inventivetalent</groupId>
     <artifactId>elytratarget</artifactId>
-    <version>1.0.0</version>
+    <version>1.1.0</version>
     <name>ElytraTarget</name>
 
     <build>
@@ -104,13 +104,13 @@
         <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot</artifactId>
-            <version>1.9-R0.1-SNAPSHOT</version>
+            <version>1.10-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.bukkit</groupId>
             <artifactId>craftbukkit</artifactId>
-            <version>1.9-R0.1-SNAPSHOT</version>
+            <version>1.10-R0.1-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.mcstats.bukkit</groupId>
@@ -120,7 +120,7 @@
         <dependency>
             <groupId>org.inventivetalent</groupId>
             <artifactId>particleapi</artifactId>
-            <version>2.0.0</version>
+            <version>2.1.1</version>
         </dependency>
         <dependency>
             <groupId>org.inventivetalent</groupId>
@@ -130,7 +130,7 @@
         <dependency>
             <groupId>org.inventivetalent</groupId>
             <artifactId>reflectionhelper</artifactId>
-            <version>1.1.0</version>
+            <version>1.8.0</version>
         </dependency>
     </dependencies>
 

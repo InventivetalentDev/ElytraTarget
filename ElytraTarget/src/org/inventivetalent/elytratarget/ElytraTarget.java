@@ -43,6 +43,7 @@ import org.bukkit.util.Vector;
 import org.inventivetalent.particle.ParticleEffect;
 import org.inventivetalent.reflection.minecraft.Minecraft;
 import org.inventivetalent.reflection.resolver.MethodResolver;
+import org.inventivetalent.reflection.resolver.ResolverQuery;
 import org.inventivetalent.reflection.resolver.minecraft.NMSClassResolver;
 import org.inventivetalent.title.TitleAPI;
 import org.mcstats.MetricsLite;
@@ -53,6 +54,7 @@ public class ElytraTarget extends JavaPlugin implements Listener {
 
 	static NMSClassResolver nmsClassResolver           = new NMSClassResolver();
 	static MethodResolver   EntityLivingMethodResolver = new MethodResolver(nmsClassResolver.resolveSilent("EntityLiving"));
+	static MethodResolver   EntityMethodResolver       = new MethodResolver(nmsClassResolver.resolveSilent("Entity"));
 
 	double T_LIME_MIN = -0.3;
 	double T_LIME_MAX = 0.3;
@@ -153,7 +155,7 @@ public class ElytraTarget extends JavaPlugin implements Listener {
 		}
 		boolean elytra = false;
 		try {
-			elytra = (boolean) EntityLivingMethodResolver.resolve("cB").invoke(Minecraft.getHandle(player));
+			elytra = (boolean) EntityMethodResolver.resolve(new ResolverQuery("getFlag", int.class)).invoke(Minecraft.getHandle(player), 7);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
