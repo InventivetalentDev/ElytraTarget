@@ -1,0 +1,4 @@
+name: ElytraTarget
+main: org.inventivetalent.elytratarget.ElytraTarget
+author: inventivetalent
+version: ${project.version}

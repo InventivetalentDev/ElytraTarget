@@ -1,60 +1,15 @@
-/*
- * Copyright 2015-2016 inventivetalent. All rights reserved.
- *
- *  Redistribution and use in source and binary forms, with or without modification, are
- *  permitted provided that the following conditions are met:
- *
- *     1. Redistributions of source code must retain the above copyright notice, this list of
- *        conditions and the following disclaimer.
- *
- *     2. Redistributions in binary form must reproduce the above copyright notice, this list
- *        of conditions and the following disclaimer in the documentation and/or other materials
- *        provided with the distribution.
- *
- *  THIS SOFTWARE IS PROVIDED BY THE AUTHOR ''AS IS'' AND ANY EXPRESS OR IMPLIED
- *  WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND
- *  FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE AUTHOR OR
- *  CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
- *  CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
- *  SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
- *  ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
- *  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
- *  ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *
- *  The views and conclusions contained in the software and documentation are those of the
- *  authors and contributors and should not be interpreted as representing official policies,
- *  either expressed or implied, of anybody else.
- */
-
 package org.inventivetalent.elytratarget;
 
 import net.md_5.bungee.api.ChatColor;
-import net.md_5.bungee.api.chat.TextComponent;
-import org.bukkit.Bukkit;
-import org.bukkit.Color;
-import org.bukkit.Location;
-import org.bukkit.Material;
+import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.util.Vector;
-import org.inventivetalent.particle.ParticleEffect;
-import org.inventivetalent.reflection.minecraft.Minecraft;
-import org.inventivetalent.reflection.resolver.MethodResolver;
-import org.inventivetalent.reflection.resolver.ResolverQuery;
-import org.inventivetalent.reflection.resolver.minecraft.NMSClassResolver;
-import org.inventivetalent.title.TitleAPI;
-import org.mcstats.MetricsLite;
-
-import java.util.Collections;
 
 public class ElytraTarget extends JavaPlugin implements Listener {
-
-	static NMSClassResolver nmsClassResolver           = new NMSClassResolver();
-	static MethodResolver   EntityLivingMethodResolver = new MethodResolver(nmsClassResolver.resolveSilent("EntityLiving"));
-	static MethodResolver   EntityMethodResolver       = new MethodResolver(nmsClassResolver.resolveSilent("Entity"));
 
 	double T_LIME_MIN = -0.3;
 	double T_LIME_MAX = 0.3;
@@ -86,14 +41,6 @@ public class ElytraTarget extends JavaPlugin implements Listener {
 
 		saveDefaultConfig();
 		reload();
-
-		try {
-			MetricsLite metrics = new MetricsLite(this);
-			if (metrics.start()) {
-				getLogger().info("Metrics started");
-			}
-		} catch (Exception e) {
-		}
 	}
 
 	void reload() {
@@ -153,12 +100,7 @@ public class ElytraTarget extends JavaPlugin implements Listener {
 		if (player.getInventory().getChestplate() == null || player.getInventory().getChestplate().getType() != Material.ELYTRA) {
 			return;
 		}
-		boolean elytra = false;
-		try {
-			elytra = (boolean) EntityMethodResolver.resolve(new ResolverQuery("getFlag", int.class)).invoke(Minecraft.getHandle(player), 7);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		boolean elytra = player.isGliding();
 		if (elytra && !player.isOnGround() && !player.isFlying()) {
 			if (player.getLocation().getBlock().getType() != Material.AIR) {
 				return;//In water
@@ -198,11 +140,10 @@ public class ElytraTarget extends JavaPlugin implements Listener {
 			for (double d = D_START; d < D_TOTAL; d += BEAM_FREQUENCY) {
 				Location location1 = velocity.clone().multiply(d).add(player.getLocation().toVector()).toLocation(player.getLocation().getWorld());
 				if (location1.getBlock().getType() != Material.AIR) { continue; }
-				ParticleEffect.REDSTONE.sendColor(Collections.singleton(player), location1.getX(), location1.getY(), location1.getZ(), color);
+				player.spawnParticle(Particle.REDSTONE, location1, 0, new Particle.DustOptions(color, 1));
 			}
 		}
 		if (TITLE_ENABLED && player.hasPermission("elytratarget.title")) {
-			TitleAPI.sendTimings(player, 0, 10, 5);
 			String direction;
 			if (pitch <= T_LIME_MAX && pitch >= T_LIME_MIN) {
 				direction = T_LEVEL;
@@ -213,9 +154,7 @@ public class ElytraTarget extends JavaPlugin implements Listener {
 					direction = T_DOWN;
 				}
 			}
-			TextComponent component = new TextComponent(direction);
-			component.setColor(chatColor);
-			TitleAPI.sendTitle(player, component);
+			player.sendTitle(chatColor + direction, "", 0, 10, 5);
 		}
 	}
 
