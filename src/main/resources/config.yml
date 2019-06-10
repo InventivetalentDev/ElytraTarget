@@ -14,7 +14,7 @@ threshold:
       min: -10
       max: 10
 beam:
-  #Enable the particle beam (requires ParticleAPI: https://r.spiget.org/2067)
+  #Enable the particle beam
   enabled: true
   distance:
     #The initial distance away from the player
@@ -24,7 +24,7 @@ beam:
   #Distance between particles
   frequency: 2
 titles:
-  #Enable titles (requires TitleAPI: https://r.spiget.org/1047)
+  #Enable titles
   enabled: true
   direction:
     level: "--     --"
