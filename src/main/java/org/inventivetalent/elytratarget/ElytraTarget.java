@@ -69,19 +69,6 @@ public class ElytraTarget extends JavaPlugin implements Listener {
 		T_LEVEL = getConfig().getString("titles.direction.level");
 		T_UP = getConfig().getString("titles.direction.up");
 		T_DOWN = getConfig().getString("titles.direction.down");
-
-		if (BEAM_ENABLED) {
-			if (!Bukkit.getPluginManager().isPluginEnabled("ParticleLIB") && !classExists("org.inventivetalent.particle.ParticleEffect")) {
-				BEAM_ENABLED = false;
-				getLogger().warning("*** Please download ParticleLIB to enable the Beam: https://r.spiget.org/2067");
-			}
-		}
-		if (TITLE_ENABLED) {
-			if (!Bukkit.getPluginManager().isPluginEnabled("TitleAPI") && !classExists("org.inventivetalent.title.TitleAPI")) {
-				TITLE_ENABLED = false;
-				getLogger().warning("*** Please download TitleAPI to enable Titles: https://r.spiget.org/1047");
-			}
-		}
 	}
 
 	boolean classExists(String clazz) {
